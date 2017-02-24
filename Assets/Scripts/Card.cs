@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 
-public class Card : MonoBehaviour
+public class Card
 {
+	public Card(CardType cardType)
+	{
+		SetCardType(cardType);
+	}
+
 	[SerializeField]
 	private CardType cardType;
 
