@@ -1,30 +1,28 @@
-﻿using System.Collections;
+﻿
 using System.Collections.Generic;
-using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player
 {
-	[SerializeField]
 	private List<Card> deck;
-	[SerializeField]
 	private List<Card> hand;
-	[SerializeField]
 	private List<Card> discardPile;
+	private CardTable cardTable;
 
-	private void Start()
+	public Player(int deckSize, int handSize, CardTable cardTable, Board board)
 	{
 		deck = new List<Card>();
 		hand = new List<Card>();
 		discardPile = new List<Card>();
+		this.cardTable = cardTable;
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < deckSize; i++)
 		{
 			deck.Add(new Card(CardType.Archmage));
 		}
 
-		for(int i = 0; i < 3; i++) 
+		for (int i = 0; i < handSize; i++)
 		{
-			DrawCard();
+			DrawCard(board);
 		}
 	}
 
@@ -64,13 +62,28 @@ public class Player : MonoBehaviour
 		hand.Add(card);
 	}
 
-	public void DrawCard()
+	public void DrawCard(Board board)
 	{
-		AddCardToHand(GetNextCardFromDeck());
+		Card card = GetNextCardFromDeck();
+		if(card != null)
+		{
+			cardTable.HandleOnDraw(board, this, card);
+			AddCardToHand(card);
+		}
+	}
+
+	public List<Card> GetDeck()
+	{
+		return deck;
 	}
 
 	public List<Card> GetHand()
 	{
 		return hand;
+	}
+
+	public List<Card> GetDiscardPile()
+	{
+		return discardPile;
 	}
 }
